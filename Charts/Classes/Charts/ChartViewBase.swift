@@ -362,14 +362,14 @@ open class ChartViewBase: NSUIView, ChartDataProvider, AnimatorDelegate
                     text: noDataText,
                     point: CGPoint(x: frame.width / 2.0, y: y),
                     align: .center,
-                    attributes: [NSFontAttributeName: infoFont, NSForegroundColorAttributeName: infoTextColor]
+                    attributes: [convertFromNSAttributedStringKey(NSAttributedString.Key.font): infoFont, convertFromNSAttributedStringKey(NSAttributedString.Key.foregroundColor): infoTextColor]
                 )
                 y = y + infoFont.lineHeight
             }
             
             if (noDataTextDescription != nil && (noDataTextDescription!).characters.count > 0)
             {
-                ChartUtils.drawText(context: context, text: noDataTextDescription!, point: CGPoint(x: frame.width / 2.0, y: y), align: .center, attributes: [NSFontAttributeName: infoFont, NSForegroundColorAttributeName: infoTextColor])
+                ChartUtils.drawText(context: context, text: noDataTextDescription!, point: CGPoint(x: frame.width / 2.0, y: y), align: .center, attributes: [convertFromNSAttributedStringKey(NSAttributedString.Key.font): infoFont, convertFromNSAttributedStringKey(NSAttributedString.Key.foregroundColor): infoTextColor])
             }
             
             return
@@ -408,8 +408,8 @@ open class ChartViewBase: NSUIView, ChartDataProvider, AnimatorDelegate
             #endif
         }
         
-        attrs[NSFontAttributeName] = font
-        attrs[NSForegroundColorAttributeName] = descriptionTextColor
+        attrs[convertFromNSAttributedStringKey(NSAttributedString.Key.font)] = font
+        attrs[convertFromNSAttributedStringKey(NSAttributedString.Key.foregroundColor)] = descriptionTextColor
 
         if descriptionTextPosition == nil
         {
@@ -1060,4 +1060,9 @@ open class ChartViewBase: NSUIView, ChartDataProvider, AnimatorDelegate
             super.nsuiTouchesCancelled(touches, withEvent: event)
         }
     }
+}
+
+// Helper function inserted by Swift 4.2 migrator.
+fileprivate func convertFromNSAttributedStringKey(_ input: NSAttributedString.Key) -> String {
+	return input.rawValue
 }
