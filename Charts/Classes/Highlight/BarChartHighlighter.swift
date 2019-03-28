@@ -21,8 +21,8 @@ public class BarChartHighlighter: ChartHighlighter
     {
         if let barData = self.chart?.data as? BarChartData
         {
-            let xIndex = getXIndex(x)
-            let baseNoSpace = getBase(x)
+            let xIndex = getXIndex(x: x)
+            let baseNoSpace = getBase(x: x)
             let setCount = barData.dataSetCount
             var dataSetIndex = Int(baseNoSpace) % setCount
             
@@ -38,13 +38,12 @@ public class BarChartHighlighter: ChartHighlighter
             guard let selectionDetail = getSelectionDetail(xIndex: xIndex, y: y, dataSetIndex: dataSetIndex)
                 else { return nil }
             
-            if let set = barData.getDataSetByIndex(dataSetIndex) as? IBarChartDataSet
-                where set.isStacked
+            if let set = barData.getDataSetByIndex(index: dataSetIndex) as? IBarChartDataSet, set.isStacked
             {
                 var pt = CGPoint(x: 0.0, y: y)
                 
                 // take any transformer to determine the x-axis value
-                self.chart?.getTransformer(set.axisDependency).pixelToValue(&pt)
+                self.chart?.getTransformer(which: set.axisDependency).pixelToValue(pixel: &pt)
                 
                 return getStackedHighlight(selectionDetail: selectionDetail,
                                            set: set,
@@ -67,11 +66,11 @@ public class BarChartHighlighter: ChartHighlighter
         {
             if !barData.isGrouped
             {
-                return super.getXIndex(x)
+                return super.getXIndex(x: x)
             }
             else
             {
-                let baseNoSpace = getBase(x)
+                let baseNoSpace = getBase(x: x)
                 
                 let setCount = barData.dataSetCount
                 var xIndex = Int(baseNoSpace) / setCount
@@ -96,15 +95,17 @@ public class BarChartHighlighter: ChartHighlighter
         }
     }
     
-    public override func getSelectionDetail(xIndex xIndex: Int, y: CGFloat, dataSetIndex: Int?) -> ChartSelectionDetail?
+    public override func getSelectionDetail(xIndex: Int, y: CGFloat, dataSetIndex: Int?) -> ChartSelectionDetail?
     {
         if let barData = self.chart?.data as? BarChartData
         {
             let dataSetIndex = dataSetIndex ?? 0
-            let dataSet = barData.dataSetCount > dataSetIndex ? barData.getDataSetByIndex(dataSetIndex) : nil
-            let yValue = dataSet.yValForXIndex(xIndex)
+            guard let dataSet = barData.dataSetCount > dataSetIndex ? barData.getDataSetByIndex(index: dataSetIndex) : nil else {
+                return nil
+            }
+            let yValue = dataSet.yValForXIndex(x: xIndex)
             
-            if isnan(yValue) { return nil }
+            if yValue.isNaN { return nil }
             
             return ChartSelectionDetail(value: yValue, dataSetIndex: dataSetIndex, dataSet: dataSet)
         }
@@ -125,7 +126,7 @@ public class BarChartHighlighter: ChartHighlighter
                                                     xIndex: Int,
                                                     yValue: Double) -> ChartHighlight?
     {
-        guard let entry = set.entryForXIndex(xIndex) as? BarChartDataEntry
+        guard let entry = set.entryForXIndex(x: xIndex) as? BarChartDataEntry
             else { return nil }
         
         if entry.values == nil
@@ -137,8 +138,7 @@ public class BarChartHighlighter: ChartHighlighter
                                   stackIndex: -1)
         }
 
-        if let ranges = getRanges(entry: entry)
-            where ranges.count > 0
+        if let ranges = getRanges(entry: entry), ranges.count > 0
         {
             let stackIndex = getClosestStackIndex(ranges: ranges, value: yValue)
             return ChartHighlight(xIndex: xIndex,
@@ -167,7 +167,7 @@ public class BarChartHighlighter: ChartHighlighter
         
         for range in ranges!
         {
-            if range.contains(value)
+            if range.contains(value: value)
             {
                 return stackIndex
             }
@@ -195,7 +195,7 @@ public class BarChartHighlighter: ChartHighlighter
         pt.x = CGFloat(x)
         
         // take any transformer to determine the x-axis value
-        self.chart?.getTransformer(ChartYAxis.AxisDependency.Left).pixelToValue(&pt)
+        self.chart?.getTransformer(which: ChartYAxis.AxisDependency.Left).pixelToValue(pixel: &pt)
         let xVal = Double(pt.x)
         
         let setCount = barData.dataSetCount ?? 0

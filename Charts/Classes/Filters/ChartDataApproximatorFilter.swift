@@ -44,7 +44,7 @@ public class ChartDataApproximatorFilter: ChartDataBaseFilter
     {
         super.init()
         
-        setup(type, tolerance: tolerance)
+        setup(type: type, tolerance: tolerance)
     }
     
     /// Sets type and tolerance.
@@ -67,7 +67,7 @@ public class ChartDataApproximatorFilter: ChartDataBaseFilter
     /// - parameter points: the points to filter
     public override func filter(points: [ChartDataEntry]) -> [ChartDataEntry]
     {
-        return filter(points, tolerance: tolerance)
+        return filter(points: points, tolerance: tolerance)
     }
     
     /// Filters according to type.
@@ -84,7 +84,7 @@ public class ChartDataApproximatorFilter: ChartDataBaseFilter
         switch (type)
         {
         case .RamerDouglasPeucker:
-            return reduceWithDouglasPeuker(points, epsilon: tolerance)
+            return reduceWithDouglasPeuker(entries: points, epsilon: tolerance)
         case .None:
             return points
         }
@@ -99,14 +99,14 @@ public class ChartDataApproximatorFilter: ChartDataBaseFilter
             return entries
         }
         
-        var keep = [Bool](count: entries.count, repeatedValue: false)
+        var keep = [Bool](repeating: false, count: entries.count)
         
         // first and last always stay
         keep[0] = true
         keep[entries.count - 1] = true
         
         // first and last entry are entry point to recursion
-        algorithmDouglasPeucker(entries, epsilon: epsilon, start: 0, end: entries.count - 1, keep: &keep)
+        algorithmDouglasPeucker(entries: entries, epsilon: epsilon, start: 0, end: entries.count - 1, keep: &keep)
         
         // create a new array with series, only take the kept ones
         var reducedEntries = [ChartDataEntry]()
@@ -128,7 +128,7 @@ public class ChartDataApproximatorFilter: ChartDataBaseFilter
     /// - parameter epsilon: as y-value
     /// - parameter start:
     /// - parameter end:
-    private func algorithmDouglasPeucker(entries: [ChartDataEntry], epsilon: Double, start: Int, end: Int, inout keep: [Bool])
+    private func algorithmDouglasPeucker(entries: [ChartDataEntry], epsilon: Double, start: Int, end: Int, keep: inout [Bool])
     {
         if (end <= start + 1)
         {
@@ -145,7 +145,7 @@ public class ChartDataApproximatorFilter: ChartDataBaseFilter
         
         for i in start + 1 ..< end
         {
-            let dist = calcAngleBetweenLines(firstEntry, end1: lastEntry, start2: firstEntry, end2: entries[i])
+            let dist = calcAngleBetweenLines(start1: firstEntry, end1: lastEntry, start2: firstEntry, end2: entries[i])
             
             // keep the point with the greatest distance
             if (dist > distMax)
@@ -161,8 +161,8 @@ public class ChartDataApproximatorFilter: ChartDataBaseFilter
             keep[maxDistIndex] = true
             
             // recursive call
-            algorithmDouglasPeucker(entries, epsilon: epsilon, start: start, end: maxDistIndex, keep: &keep)
-            algorithmDouglasPeucker(entries, epsilon: epsilon, start: maxDistIndex, end: end, keep: &keep)
+            algorithmDouglasPeucker(entries: entries, epsilon: epsilon, start: start, end: maxDistIndex, keep: &keep)
+            algorithmDouglasPeucker(entries: entries, epsilon: epsilon, start: maxDistIndex, end: end, keep: &keep)
         } // else don't keep the point...
     }
     
@@ -190,8 +190,8 @@ public class ChartDataApproximatorFilter: ChartDataBaseFilter
     /// Calculates the angle between two given lines. The provided entries mark the starting and end points of the lines.
     private func calcAngleBetweenLines(start1: ChartDataEntry, end1: ChartDataEntry, start2: ChartDataEntry, end2: ChartDataEntry) -> Double
     {
-        let angle1 = calcAngleWithRatios(start1, p2: end1)
-        let angle2 = calcAngleWithRatios(start2, p2: end2)
+        let angle1 = calcAngleWithRatios(p1: start1, p2: end1)
+        let angle2 = calcAngleWithRatios(p1: start2, p2: end2)
         
         return fabs(angle1 - angle2)
     }

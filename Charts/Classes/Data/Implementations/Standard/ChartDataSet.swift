@@ -110,7 +110,7 @@ public class ChartDataSet: ChartBaseDataSet
         _yMin = DBL_MAX
         _yMax = -DBL_MAX
         
-        for i in start.stride(through: endValue, by: 1)
+        for i in Swift.stride(from:start, to: endValue, by: 1)
         {
             let e = _yVals[i]
             
@@ -146,16 +146,16 @@ public class ChartDataSet: ChartBaseDataSet
     /// - returns: the value of the Entry object at the given xIndex. Returns NaN if no value is at the given x-index.
     public override func yValForXIndex(x: Int) -> Double
     {
-        let e = self.entryForXIndex(x)
+        let e = self.entryForXIndex(x: x)
         
         if (e !== nil && e!.xIndex == x) { return e!.value }
-        else { return Double.NaN }
+        else { return Double.nan }
     }
     
     /// - returns: all of the y values of the Entry objects at the given xIndex. Returns NaN if no value is at the given x-index.
     public override func yValsForXIndex(x: Int) -> [Double]
     {
-        let entries = self.entriesForXIndex(x)
+        let entries = self.entriesForXIndex(x: x)
         
         var yVals = [Double]()
         for e in entries
@@ -192,7 +192,7 @@ public class ChartDataSet: ChartBaseDataSet
     /// nil if no Entry object at that index.
     public override func entryForXIndex(x: Int) -> ChartDataEntry?
     {
-        return entryForXIndex(x, rounding: .Closest)
+        return entryForXIndex(x: x, rounding: .Closest)
     }
     
     /// - returns: all Entry objects found at the given xIndex with binary search.
@@ -393,14 +393,14 @@ public class ChartDataSet: ChartBaseDataSet
             }
         }
         
-        if _yVals.last?.xIndex > e.xIndex
+        if _yVals.last?.xIndex ?? 0 > e.xIndex
         {
             var closestIndex = entryIndex(xIndex: e.xIndex, rounding: .Closest)
             if _yVals[closestIndex].xIndex < e.xIndex
             {
                 closestIndex += 1
             }
-            _yVals.insert(e, atIndex: closestIndex)
+            _yVals.insert(e, at: closestIndex)
             
             return true
         }
@@ -422,7 +422,7 @@ public class ChartDataSet: ChartBaseDataSet
         {
             if (_yVals[i] === entry)
             {
-                _yVals.removeAtIndex(i)
+                _yVals.remove(at: i)
                 removed = true
                 break
             }
@@ -488,7 +488,7 @@ public class ChartDataSet: ChartBaseDataSet
     /// Removes all values from this DataSet and recalculates min and max value.
     public override func clear()
     {
-        _yVals.removeAll(keepCapacity: true)
+        _yVals.removeAll(keepingCapacity: true)
         _lastStart = 0
         _lastEnd = 0
         notifyDataSetChanged()
@@ -503,7 +503,7 @@ public class ChartDataSet: ChartBaseDataSet
     
     public override func copyWithZone(zone: NSZone) -> AnyObject
     {
-        let copy = super.copyWithZone(zone) as! ChartDataSet
+        let copy = super.copyWithZone(zone: zone) as! ChartDataSet
         
         copy._yVals = _yVals
         copy._yMax = _yMax

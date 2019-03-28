@@ -52,7 +52,7 @@ public class ChartData: NSObject
         _xVals = xVals == nil ? [String?]() : xVals
         _dataSets = dataSets == nil ? [IChartDataSet]() : dataSets
         
-        self.initialize(_dataSets)
+        self.initialize(dataSets: _dataSets)
     }
     
     public init(xVals: [NSObject]?, dataSets: [IChartDataSet]?)
@@ -62,7 +62,7 @@ public class ChartData: NSObject
         _xVals = xVals == nil ? [String?]() : ChartUtils.bridgedObjCGetStringArray(objc: xVals!)
         _dataSets = dataSets == nil ? [IChartDataSet]() : dataSets
         
-        self.initialize(_dataSets)
+        self.initialize(dataSets: _dataSets)
     }
     
     public convenience init(xVals: [String?]?)
@@ -87,7 +87,7 @@ public class ChartData: NSObject
     
     internal func initialize(dataSets: [IChartDataSet])
     {
-        checkIsLegal(dataSets)
+        checkIsLegal(dataSets: dataSets)
         
         calcMinMax(start: _lastStart, end: _lastEnd)
         calcYValueCount()
@@ -123,11 +123,6 @@ public class ChartData: NSObject
             return
         }
         
-        if self is ScatterChartData
-        { // In scatter chart it makes sense to have more than one y-value value for an x-index
-            return
-        }
-        
         for i in 0 ..< dataSets.count
         {
             if (dataSets[i].entryCount > _xVals.count)
@@ -142,7 +137,7 @@ public class ChartData: NSObject
     /// Calling this performs all necessary recalculations needed when the contained data has changed.
     public func notifyDataChanged()
     {
-        initialize(_dataSets)
+        initialize(dataSets: _dataSets)
     }
     
     /// calc minimum and maximum y value over all datasets
@@ -234,7 +229,7 @@ public class ChartData: NSObject
             }
 
             // in case there is only one axis, adjust the second axis
-            handleEmptyAxis(firstLeft, firstRight: firstRight)
+            handleEmptyAxis(firstLeft: firstLeft, firstRight: firstRight)
         }
     }
     
@@ -348,7 +343,7 @@ public class ChartData: NSObject
     /// Removes the x-value at the specified index.
     public func removeXValue(index: Int)
     {
-        _xVals.removeAtIndex(index)
+        _xVals.remove(at: index)
     }
     
     /// - returns: the array of ChartDataSets this object holds.
@@ -361,7 +356,7 @@ public class ChartData: NSObject
         set
         {
             _dataSets = newValue
-            initialize(_dataSets)
+            initialize(dataSets: _dataSets)
         }
     }
     
@@ -383,7 +378,7 @@ public class ChartData: NSObject
                 {
                     continue
                 }
-                if (label.caseInsensitiveCompare(dataSets[i].label!) == NSComparisonResult.OrderedSame)
+                if (label.caseInsensitiveCompare(dataSets[i].label!) == ComparisonResult.orderedSame)
                 {
                     return i
                 }
@@ -441,10 +436,10 @@ public class ChartData: NSObject
         {
             // The value of the highlighted entry could be NaN - if we are not interested in highlighting a specific value.
         
-            let entries = _dataSets[highlight.dataSetIndex].entriesForXIndex(highlight.xIndex)
+            let entries = _dataSets[highlight.dataSetIndex].entriesForXIndex(x: highlight.xIndex)
             for e in entries
             {
-                if e.value == highlight.value || isnan(highlight.value)
+                if e.value == highlight.value || highlight.value.isNaN
                 {
                     return e
                 }
@@ -461,7 +456,7 @@ public class ChartData: NSObject
     /// - returns: the DataSet Object with the given label. Sensitive or not.
     public func getDataSetByLabel(label: String, ignorecase: Bool) -> IChartDataSet?
     {
-        let index = getDataSetIndexByLabel(label, ignorecase: ignorecase)
+        let index = getDataSetIndexByLabel(label: label, ignorecase: ignorecase)
         
         if (index < 0 || index >= _dataSets.count)
         {
@@ -545,7 +540,7 @@ public class ChartData: NSObject
         
         _dataSets.append(d)
         
-        handleEmptyAxis(getFirstLeft(), firstRight: getFirstRight())
+        handleEmptyAxis(firstLeft: getFirstLeft(), firstRight: getFirstRight())
     }
     
     public func handleEmptyAxis(firstLeft: IChartDataSet?, firstRight: IChartDataSet?)
@@ -578,7 +573,7 @@ public class ChartData: NSObject
         {
             if (_dataSets[i] === dataSet)
             {
-                return removeDataSetByIndex(i)
+                return removeDataSetByIndex(index: i)
             }
         }
         
@@ -596,7 +591,7 @@ public class ChartData: NSObject
             return false
         }
         
-        let d = _dataSets.removeAtIndex(index)
+        let d = _dataSets.remove(at: index)
         _yValCount -= d.entryCount
         
         calcMinMax(start: _lastStart, end: _lastEnd)
@@ -612,7 +607,7 @@ public class ChartData: NSObject
             let val = e.value
             let set = _dataSets[dataSetIndex]
             
-            if !set.addEntry(e) { return }
+            if !set.addEntry(e: e) { return }
             
             if (_yValCount == 0)
             {
@@ -667,7 +662,7 @@ public class ChartData: NSObject
             
             _yValCount += 1
             
-            handleEmptyAxis(getFirstLeft(), firstRight: getFirstRight())
+            handleEmptyAxis(firstLeft: getFirstLeft(), firstRight: getFirstRight())
         }
         else
         {
@@ -685,7 +680,7 @@ public class ChartData: NSObject
         }
         
         // remove the entry from the dataset
-        let removed = _dataSets[dataSetIndex].removeEntry(entry)
+        let removed = _dataSets[dataSetIndex].removeEntry(entry:entry)
         
         if (removed)
         {
@@ -706,15 +701,15 @@ public class ChartData: NSObject
         {
             return false
         }
-        
-        let entry = _dataSets[dataSetIndex].entryForXIndex(xIndex)
+
+        let entry = _dataSets[dataSetIndex].entryForXIndex(x: xIndex)
         
         if (entry?.xIndex != xIndex)
         {
             return false
         }
         
-        return removeEntry(entry, dataSetIndex: dataSetIndex)
+        return removeEntry(entry: entry, dataSetIndex: dataSetIndex)
     }
     
     /// - returns: the DataSet that contains the provided Entry, or null, if no DataSet contains this entry.
@@ -729,7 +724,7 @@ public class ChartData: NSObject
         {
             let set = _dataSets[i]
             
-            if (e === set.entryForXIndex(e.xIndex))
+            if (e === set.entryForXIndex(x: e.xIndex))
             {
                 return set
             }
@@ -824,7 +819,7 @@ public class ChartData: NSObject
     }
     
     /// Sets a custom ValueFormatter for all DataSets this data object contains.
-    public func setValueFormatter(formatter: NSNumberFormatter!)
+    public func setValueFormatter(formatter: NumberFormatter!)
     {
         for set in dataSets
         {
@@ -891,7 +886,7 @@ public class ChartData: NSObject
     /// Don't forget to invalidate the chart after this.
     public func clearValues()
     {
-        dataSets.removeAll(keepCapacity: false)
+        dataSets.removeAll(keepingCapacity: false)
         notifyDataChanged()
     }
     
@@ -901,7 +896,7 @@ public class ChartData: NSObject
     {
         for set in dataSets
         {
-            if set.contains(entry)
+            if set.contains(e: entry)
             {
                 return true
             }

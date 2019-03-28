@@ -32,7 +32,7 @@ public class BarChartDataEntry: ChartDataEntry
     /// Constructor for stacked bar entries.
     public init(values: [Double], xIndex: Int)
     {
-        super.init(value: BarChartDataEntry.calcSum(values), xIndex: xIndex)
+        super.init(value: BarChartDataEntry.calcSum(vals: values), xIndex: xIndex)
         self.values = values
         calcPosNegSum()
     }
@@ -46,7 +46,7 @@ public class BarChartDataEntry: ChartDataEntry
     /// Constructor for stacked bar entries.
     public init(values: [Double], xIndex: Int, label: String)
     {
-        super.init(value: BarChartDataEntry.calcSum(values), xIndex: xIndex, data: label)
+        super.init(value: BarChartDataEntry.calcSum(vals: values), xIndex: xIndex, data: label as AnyObject)
         self.values = values
     }
     
@@ -126,7 +126,7 @@ public class BarChartDataEntry: ChartDataEntry
         get { return self._values }
         set
         {
-            self.value = BarChartDataEntry.calcSum(newValue)
+            self.value = BarChartDataEntry.calcSum(vals: newValue)
             self._values = newValue
             calcPosNegSum()
         }
@@ -136,7 +136,7 @@ public class BarChartDataEntry: ChartDataEntry
     
     public override func copyWithZone(zone: NSZone) -> AnyObject
     {
-        let copy = super.copyWithZone(zone) as! BarChartDataEntry
+        let copy = super.copyWithZone(zone: zone) as! BarChartDataEntry
         copy._values = _values
         copy.value = value
         copy._negativeSum = _negativeSum

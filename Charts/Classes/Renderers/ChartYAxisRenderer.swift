@@ -40,8 +40,8 @@ public class ChartYAxisRenderer: ChartAxisRendererBase
         // zoom / contentrect bounds)
         if (viewPortHandler.contentWidth > 10.0 && !viewPortHandler.isFullyZoomedOutY)
         {
-            let p1 = transformer.getValueByTouchPoint(CGPoint(x: viewPortHandler.contentLeft, y: viewPortHandler.contentTop))
-            let p2 = transformer.getValueByTouchPoint(CGPoint(x: viewPortHandler.contentLeft, y: viewPortHandler.contentBottom))
+            let p1 = transformer.getValueByTouchPoint(point: CGPoint(x: viewPortHandler.contentLeft, y: viewPortHandler.contentTop))
+            let p2 = transformer.getValueByTouchPoint(point: CGPoint(x: viewPortHandler.contentLeft, y: viewPortHandler.contentBottom))
             
             if (!yAxis.isInverted)
             {
@@ -296,7 +296,7 @@ public class ChartYAxisRenderer: ChartAxisRendererBase
             pt.x = fixedPosition
             pt.y += offset
             
-            ChartUtils.drawText(context: context, text: text, point: pt, align: textAlign, attributes: [NSFontAttributeName: labelFont, NSForegroundColorAttributeName: labelTextColor])
+            ChartUtils.drawText(context: context, text: text, point: pt, align: textAlign, attributes: [NSAttributedString.Key.font: labelFont, NSAttributedString.Key.foregroundColor: labelTextColor])
         }
     }
     
@@ -338,7 +338,7 @@ public class ChartYAxisRenderer: ChartAxisRendererBase
             {
                 position.x = 0.0
                 position.y = CGFloat(yAxis.entries[i])
-                position = CGPointApplyAffineTransform(position, valueToPixelMatrix)
+                position = position.applying(valueToPixelMatrix)
                 
                 _gridLineBuffer[0].x = viewPortHandler.contentLeft
                 _gridLineBuffer[0].y = position.y
@@ -347,7 +347,7 @@ public class ChartYAxisRenderer: ChartAxisRendererBase
                 CGContextStrokeLineSegments(context, _gridLineBuffer, 2)
             }
             
-            CGContextRestoreGState(context)
+            context.restoreGState()
         }
 
         if yAxis.drawZeroLineEnabled
@@ -355,7 +355,7 @@ public class ChartYAxisRenderer: ChartAxisRendererBase
             // draw zero line
             
             var position = CGPoint(x: 0.0, y: 0.0)
-            transformer.pointValueToPixel(&position)
+            transformer.pointValueToPixel(point: &position)
                 
             drawZeroLine(context: context,
                 x1: viewPortHandler.contentLeft,
@@ -375,7 +375,7 @@ public class ChartYAxisRenderer: ChartAxisRendererBase
     {
         guard let
             yAxis = yAxis,
-            zeroLineColor = yAxis.zeroLineColor
+            let zeroLineColor = yAxis.zeroLineColor
             else { return }
         
         CGContextSaveGState(context)
@@ -467,7 +467,7 @@ public class ChartYAxisRenderer: ChartAxisRendererBase
                             x: viewPortHandler.contentRight - xOffset,
                             y: position.y - yOffset),
                         align: .Right,
-                        attributes: [NSFontAttributeName: l.valueFont, NSForegroundColorAttributeName: l.valueTextColor])
+                        attributes: [NSAttributedString.Key.font: l.valueFont, NSAttributedString.Key.foregroundColor: l.valueTextColor])
                 }
                 else if (l.labelPosition == .RightBottom)
                 {
@@ -477,7 +477,7 @@ public class ChartYAxisRenderer: ChartAxisRendererBase
                             x: viewPortHandler.contentRight - xOffset,
                             y: position.y + yOffset - labelLineHeight),
                         align: .Right,
-                        attributes: [NSFontAttributeName: l.valueFont, NSForegroundColorAttributeName: l.valueTextColor])
+                        attributes: [NSAttributedString.Key.font: l.valueFont, NSAttributedString.Key.foregroundColor: l.valueTextColor])
                 }
                 else if (l.labelPosition == .LeftTop)
                 {
@@ -487,7 +487,7 @@ public class ChartYAxisRenderer: ChartAxisRendererBase
                             x: viewPortHandler.contentLeft + xOffset,
                             y: position.y - yOffset),
                         align: .Left,
-                        attributes: [NSFontAttributeName: l.valueFont, NSForegroundColorAttributeName: l.valueTextColor])
+                        attributes: [NSAttributedString.Key.font: l.valueFont, NSAttributedString.Key.foregroundColor: l.valueTextColor])
                 }
                 else
                 {
@@ -497,7 +497,7 @@ public class ChartYAxisRenderer: ChartAxisRendererBase
                             x: viewPortHandler.contentLeft + xOffset,
                             y: position.y + yOffset - labelLineHeight),
                         align: .Left,
-                        attributes: [NSFontAttributeName: l.valueFont, NSForegroundColorAttributeName: l.valueTextColor])
+                        attributes: [NSAttributedString.Key.font: l.valueFont, NSAttributedString.Key.foregroundColor: l.valueTextColor])
                 }
             }
         }

@@ -49,13 +49,13 @@ public class ChartMarker: NSObject
     /// Draws the ChartMarker on the given position on the given context
     public func draw(context context: CGContext, point: CGPoint)
     {
-        let offset = self.offsetForDrawingAtPos(point)
+        let offset = self.offsetForDrawingAtPos(point: point)
         let size = self.size
         
         let rect = CGRect(x: point.x + offset.x, y: point.y + offset.y, width: size.width, height: size.height)
         
-        NSUIGraphicsPushContext(context)
-        image!.drawInRect(rect)
+        NSUIGraphicsPushContext(context: context)
+        image!.draw(in: rect)
         NSUIGraphicsPopContext()
     }
     

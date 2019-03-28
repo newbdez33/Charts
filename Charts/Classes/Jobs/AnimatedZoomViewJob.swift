@@ -37,7 +37,7 @@ public class AnimatedZoomChartViewJob: AnimatedViewPortJob
         zoomCenterY: CGFloat,
         zoomOriginX: CGFloat,
         zoomOriginY: CGFloat,
-        duration: NSTimeInterval,
+        duration: TimeInterval,
         easing: ChartEasingFunctionBlock?)
     {
         super.init(viewPortHandler: viewPortHandler,
@@ -64,8 +64,8 @@ public class AnimatedZoomChartViewJob: AnimatedViewPortJob
     {
         guard let
             viewPortHandler = viewPortHandler,
-            transformer = transformer,
-            view = view
+            let transformer = transformer,
+            let view = view
             else { return }
         
         let scaleX = xOrigin + (self.scaleX - xOrigin) * phase
@@ -82,7 +82,7 @@ public class AnimatedZoomChartViewJob: AnimatedViewPortJob
             y: zoomOriginY + ((zoomCenterY + valsInView / 2.0) - zoomOriginY) * phase
         )
         
-        transformer.pointValueToPixel(&pt)
+        transformer.pointValueToPixel(point: &pt)
         
         matrix = viewPortHandler.translate(pt: pt)
         viewPortHandler.refresh(newMatrix: matrix, chart: view, invalidate: true)

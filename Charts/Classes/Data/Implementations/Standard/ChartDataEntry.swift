@@ -48,30 +48,28 @@ public class ChartDataEntry: NSObject
     }
     
     // MARK: NSObject
-    
-    public override func isEqual(object: AnyObject?) -> Bool
-    {
-        if (object === nil)
+    public override func isEqual(_ object: Any?) -> Bool {
+        if (object == nil)
         {
             return false
         }
         
-        if (!object!.isKindOfClass(self.dynamicType))
+        if !( type(of: object) == type(of: self) )
         {
             return false
         }
         
-        if (object!.data !== data && !object!.data.isEqual(self.data))
+        if ((object as! ChartDataEntry).data !== data && !(object! as! ChartDataEntry).data!.isEqual(self.data))
         {
             return false
         }
         
-        if (object!.xIndex != xIndex)
+        if ((object! as AnyObject).zIndex != xIndex)
         {
             return false
         }
         
-        if (fabs(object!.value - value) > 0.00001)
+        if (fabs((object! as AnyObject).value - value) > 0.00001)
         {
             return false
         }
@@ -90,7 +88,7 @@ public class ChartDataEntry: NSObject
     
     public func copyWithZone(zone: NSZone) -> AnyObject
     {
-        let copy = self.dynamicType.init()
+        let copy = type(of: self).init()
         
         copy.value = value
         copy.xIndex = xIndex
@@ -107,7 +105,7 @@ public func ==(lhs: ChartDataEntry, rhs: ChartDataEntry) -> Bool
         return true
     }
     
-    if (!lhs.isKindOfClass(rhs.dynamicType))
+    if !( type(of: lhs) == type(of: rhs) )
     {
         return false
     }

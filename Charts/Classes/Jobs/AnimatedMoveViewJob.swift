@@ -26,7 +26,7 @@ public class AnimatedMoveChartViewJob: AnimatedViewPortJob
         view: ChartViewBase,
         xOrigin: CGFloat,
         yOrigin: CGFloat,
-        duration: NSTimeInterval,
+        duration: TimeInterval,
         easing: ChartEasingFunctionBlock?)
     {
         super.init(viewPortHandler: viewPortHandler,
@@ -44,8 +44,8 @@ public class AnimatedMoveChartViewJob: AnimatedViewPortJob
     {
         guard let
             viewPortHandler = viewPortHandler,
-            transformer = transformer,
-            view = view
+            let transformer = transformer,
+            let view = view
             else { return }
         
         var pt = CGPoint(
@@ -53,7 +53,7 @@ public class AnimatedMoveChartViewJob: AnimatedViewPortJob
             y: yOrigin + (CGFloat(yValue) - yOrigin) * phase
         );
         
-        transformer.pointValueToPixel(&pt)
+        transformer.pointValueToPixel(point: &pt)
         viewPortHandler.centerViewPort(pt: pt, chart: view)
     }
 }

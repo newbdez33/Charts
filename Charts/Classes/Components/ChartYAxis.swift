@@ -56,7 +56,7 @@ public class ChartYAxis: ChartAxisBase
     public var inverted = false
     
     /// This property is deprecated - Use `axisMinValue` instead.
-    @available(*, deprecated=1.0, message="Use axisMinValue instead.")
+    @available(*, deprecated: 1.0, message: "Use axisMinValue instead.")
     public var startAtZeroEnabled: Bool
     {
         get
@@ -83,7 +83,7 @@ public class ChartYAxis: ChartAxisBase
     public var drawZeroLineEnabled = false
     
     /// Color of the zero line
-    public var zeroLineColor: NSUIColor? = NSUIColor.grayColor()
+    public var zeroLineColor: NSUIColor? = UIColor.gray
     
     /// Width of the zero line
     public var zeroLineWidth: CGFloat = 1.0
@@ -97,10 +97,10 @@ public class ChartYAxis: ChartAxisBase
     public var zeroLineDashLengths: [CGFloat]?
     
     /// the formatter used to customly format the y-labels
-    public var valueFormatter: NSNumberFormatter?
+    public var valueFormatter: NumberFormatter?
     
     /// the formatter used to customly format the y-labels
-    internal var _defaultValueFormatter = NSNumberFormatter()
+    internal var _defaultValueFormatter = NumberFormatter()
 
     /// axis space from the largest value to the top in percent of the total axis range
     public var spaceTop = CGFloat(0.1)
@@ -210,14 +210,14 @@ public class ChartYAxis: ChartAxisBase
         }
         set
         {
-            setLabelCount(newValue, force: false);
+            setLabelCount(count: newValue, force: false);
         }
     }
     
     public func requiredSize() -> CGSize
     {
         let label = getLongestLabel() as NSString
-        var size = label.sizeWithAttributes([NSFontAttributeName: labelFont])
+        var size = label.size(withAttributes: [NSAttributedString.Key.font: labelFont])
         size.width += xOffset * 2.0
         size.height += yOffset * 2.0
         size.width = max(minWidth, min(size.width, maxWidth > 0.0 ? maxWidth : size.width))
@@ -235,7 +235,7 @@ public class ChartYAxis: ChartAxisBase
         
         for i in 0 ..< entries.count
         {
-            let text = getFormattedLabel(i)
+            let text = getFormattedLabel(index: i)
             
             if (longest.characters.count < text.characters.count)
             {
@@ -254,7 +254,7 @@ public class ChartYAxis: ChartAxisBase
             return ""
         }
         
-        return (valueFormatter ?? _defaultValueFormatter).stringFromNumber(entries[index])!
+        return (valueFormatter ?? _defaultValueFormatter).string(from: NSNumber(value:entries[index]))!
     }
     
     /// - returns: true if this axis needs horizontal offset, false if no offset is needed.
@@ -273,7 +273,7 @@ public class ChartYAxis: ChartAxisBase
     public var isInverted: Bool { return inverted; }
     
     /// This is deprecated now, use `axisMinValue`
-    @available(*, deprecated=1.0, message="Use axisMinValue instead.")
+    @available(*, deprecated: 1.0, message: "Use axisMinValue instead.")
     public var isStartAtZeroEnabled: Bool { return startAtZeroEnabled }
 
     /// - returns: true if focing the y-label count is enabled. Default: false

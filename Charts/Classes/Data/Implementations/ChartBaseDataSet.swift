@@ -24,7 +24,7 @@ public class ChartBaseDataSet: NSObject, IChartDataSet
         
         // default color
         colors.append(NSUIColor(red: 140.0/255.0, green: 234.0/255.0, blue: 255.0/255.0, alpha: 1.0))
-        valueColors.append(NSUIColor.blackColor())
+        valueColors.append(UIColor.black)
     }
     
     public init(label: String?)
@@ -33,7 +33,7 @@ public class ChartBaseDataSet: NSObject, IChartDataSet
         
         // default color
         colors.append(NSUIColor(red: 140.0/255.0, green: 234.0/255.0, blue: 255.0/255.0, alpha: 1.0))
-        valueColors.append(NSUIColor.blackColor())
+        valueColors.append(UIColor.black)
         
         self.label = label
     }
@@ -121,29 +121,29 @@ public class ChartBaseDataSet: NSObject, IChartDataSet
         fatalError("removeEntry is not implemented in ChartBaseDataSet")
     }
     
-    public func removeEntry(xIndex xIndex: Int) -> Bool
+    public func removeEntry(xIndex: Int) -> Bool
     {
-        if let entry = entryForXIndex(xIndex)
+        if let entry = entryForXIndex(x: xIndex)
         {
-            return removeEntry(entry)
+            return removeEntry(entry: entry)
         }
         return false
     }
     
     public func removeFirst() -> Bool
     {
-        if let entry = entryForIndex(0)
+        if let entry = entryForIndex(i: 0)
         {
-            return removeEntry(entry)
+            return removeEntry(entry: entry)
         }
         return false
     }
     
     public func removeLast() -> Bool
     {
-        if let entry = entryForIndex(entryCount - 1)
+        if let entry = entryForIndex(i: entryCount - 1)
         {
-            return removeEntry(entry)
+            return removeEntry(entry: entry)
         }
         return false
     }
@@ -188,7 +188,7 @@ public class ChartBaseDataSet: NSObject, IChartDataSet
     /// Resets all colors of this DataSet and recreates the colors array.
     public func resetColors()
     {
-        colors.removeAll(keepCapacity: false)
+        colors.removeAll(keepingCapacity: false)
     }
     
     /// Adds a new color to the colors array of the DataSet.
@@ -203,7 +203,7 @@ public class ChartBaseDataSet: NSObject, IChartDataSet
     /// - parameter color: the color to set
     public func setColor(color: NSUIColor)
     {
-        colors.removeAll(keepCapacity: false)
+        colors.removeAll(keepingCapacity: false)
         colors.append(color)
     }
     
@@ -212,7 +212,7 @@ public class ChartBaseDataSet: NSObject, IChartDataSet
     /// - parameter alpha: alpha to apply to the set `color`
     public func setColor(color: NSUIColor, alpha: CGFloat)
     {
-        setColor(color.colorWithAlphaComponent(alpha))
+        setColor(color: color.withAlphaComponent(alpha))
     }
     
     /// Sets colors with a specific alpha value.
@@ -224,7 +224,7 @@ public class ChartBaseDataSet: NSObject, IChartDataSet
         
         for i in 0 ..< colorsWithAlpha.count
         {
-            colorsWithAlpha[i] = colorsWithAlpha[i] .colorWithAlphaComponent(alpha)
+            colorsWithAlpha[i] = colorsWithAlpha[i] .withAlphaComponent(alpha)
         }
         
         self.colors = colorsWithAlpha
@@ -237,10 +237,10 @@ public class ChartBaseDataSet: NSObject, IChartDataSet
     public var isHighlightEnabled: Bool { return highlightEnabled }
     
     /// the formatter used to customly format the values
-    internal var _valueFormatter: NSNumberFormatter? = ChartUtils.defaultValueFormatter()
+    internal var _valueFormatter: NumberFormatter? = ChartUtils.defaultValueFormatter()
     
     /// The formatter used to customly format the values
-    public var valueFormatter: NSNumberFormatter?
+    public var valueFormatter: NumberFormatter?
     {
         get
         {
@@ -270,7 +270,7 @@ public class ChartBaseDataSet: NSObject, IChartDataSet
         }
         set
         {
-            valueColors.removeAll(keepCapacity: false)
+            valueColors.removeAll(keepingCapacity: false)
             valueColors.append(newValue)
         }
     }
@@ -287,7 +287,7 @@ public class ChartBaseDataSet: NSObject, IChartDataSet
     }
     
     /// the font for the value-text labels
-    public var valueFont: NSUIFont = NSUIFont.systemFontOfSize(7.0)
+    public var valueFont: NSUIFont = NSUIFont.systemFont(ofSize: 7.0)
     
     /// Set this to true to draw y-values on the chart
     public var drawValuesEnabled = true
@@ -311,7 +311,7 @@ public class ChartBaseDataSet: NSObject, IChartDataSet
     
     public override var description: String
     {
-        return String(format: "%@, label: %@, %i entries", arguments: [NSStringFromClass(self.dynamicType), self.label ?? "", self.entryCount])
+        return String(format: "%@, label: %@, %i entries", arguments: [NSStringFromClass(type(of: self)), self.label ?? "", self.entryCount])
     }
     
     public override var debugDescription: String
@@ -320,7 +320,7 @@ public class ChartBaseDataSet: NSObject, IChartDataSet
         
         for i in 0 ..< self.entryCount
         {
-            desc += "\n" + (self.entryForIndex(i)?.description ?? "")
+            desc += "\n" + (self.entryForIndex(i: i)?.description ?? "")
         }
         
         return desc
@@ -330,7 +330,7 @@ public class ChartBaseDataSet: NSObject, IChartDataSet
     
     public func copyWithZone(zone: NSZone) -> AnyObject
     {
-        let copy = self.dynamicType.init()
+        let copy = type(of: self).init()
         
         copy.colors = colors
         copy.valueColors = valueColors

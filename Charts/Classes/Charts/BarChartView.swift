@@ -14,7 +14,8 @@
 import Foundation
 import CoreGraphics
 
-/// Chart that draws bars.
+/// Chart that draws bars
+@objcMembers
 public class BarChartView: BarLineChartViewBase, BarChartDataProvider
 {
     /// flag that enables or disables the highlighting arrow
@@ -73,8 +74,8 @@ public class BarChartView: BarLineChartViewBase, BarChartDataProvider
     public func getBarBounds(e: BarChartDataEntry) -> CGRect
     {
         guard let
-            set = _data?.getDataSetForEntry(e) as? IBarChartDataSet
-            else { return CGRectNull }
+            set = _data?.getDataSetForEntry(e: e) as? IBarChartDataSet
+            else { return CGRect.null }
         
         let barspace = set.barSpace
         let y = CGFloat(e.value)
@@ -90,7 +91,7 @@ public class BarChartView: BarLineChartViewBase, BarChartDataProvider
         
         var bounds = CGRect(x: left, y: top, width: right - left, height: bottom - top)
         
-        getTransformer(set.axisDependency).rectValueToPixel(&bounds)
+        getTransformer(which: set.axisDependency).rectValueToPixel(r: &bounds)
         
         return bounds
     }
@@ -101,7 +102,7 @@ public class BarChartView: BarLineChartViewBase, BarChartDataProvider
         let div = (step <= 1.0) ? 1.0 : step + (_data as! BarChartData).groupSpace
         
         var pt = CGPoint(x: _viewPortHandler.contentLeft, y: _viewPortHandler.contentBottom)
-        getTransformer(ChartYAxis.AxisDependency.Left).pixelToValue(&pt)
+        getTransformer(which: ChartYAxis.AxisDependency.Left).pixelToValue(pixel: &pt)
         
         return Int((pt.x <= CGFloat(chartXMin)) ? 0.0 : (pt.x / div) + 1.0)
     }
@@ -112,7 +113,7 @@ public class BarChartView: BarLineChartViewBase, BarChartDataProvider
         let div = (step <= 1.0) ? 1.0 : step + (_data as! BarChartData).groupSpace
         
         var pt = CGPoint(x: _viewPortHandler.contentRight, y: _viewPortHandler.contentBottom)
-        getTransformer(ChartYAxis.AxisDependency.Left).pixelToValue(&pt)
+        getTransformer(which: ChartYAxis.AxisDependency.Left).pixelToValue(pixel: &pt)
         
         return Int((pt.x >= CGFloat(chartXMax)) ? CGFloat(chartXMax) / div : (pt.x / div))
     }

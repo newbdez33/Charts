@@ -36,8 +36,8 @@ public class ChartLimitLine: ChartComponentBase
     public var lineColor = NSUIColor(red: 237.0/255.0, green: 91.0/255.0, blue: 91.0/255.0, alpha: 1.0)
     public var lineDashPhase = CGFloat(0.0)
     public var lineDashLengths: [CGFloat]?
-    public var valueTextColor = NSUIColor.blackColor()
-    public var valueFont = NSUIFont.systemFontOfSize(13.0)
+    public var valueTextColor = UIColor.black
+    public var valueFont = NSUIFont.systemFont(ofSize: 13.0)
     public var label = ""
     public var drawLabelEnabled = true
     public var labelPosition = LabelPosition.RightTop

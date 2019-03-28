@@ -31,7 +31,7 @@ public class ChartHighlighter : NSObject
     /// - returns:
     public func getHighlight(x x: CGFloat, y: CGFloat) -> ChartHighlight?
     {
-        let xIndex = getXIndex(x)
+        let xIndex = getXIndex(x: x)
         
         guard let
             selectionDetail = getSelectionDetail(xIndex: xIndex, y: y, dataSetIndex: nil)
@@ -49,7 +49,7 @@ public class ChartHighlighter : NSObject
         var pt = CGPoint(x: x, y: 0.0)
         
         // take any transformer to determine the x-axis value
-        self.chart?.getTransformer(ChartYAxis.AxisDependency.Left).pixelToValue(&pt)
+        self.chart?.getTransformer(which: ChartYAxis.AxisDependency.Left).pixelToValue(pixel: &pt)
         
         return Int(round(pt.x))
     }
@@ -61,10 +61,10 @@ public class ChartHighlighter : NSObject
     /// - returns:
     public func getSelectionDetail(xIndex xIndex: Int, y: CGFloat, dataSetIndex: Int?) -> ChartSelectionDetail?
     {
-        let valsAtIndex = getSelectionDetailsAtIndex(xIndex, dataSetIndex: dataSetIndex)
+        let valsAtIndex = getSelectionDetailsAtIndex(xIndex: xIndex, dataSetIndex: dataSetIndex)
         
-        let leftdist = ChartUtils.getMinimumDistance(valsAtIndex, y: y, axis: ChartYAxis.AxisDependency.Left)
-        let rightdist = ChartUtils.getMinimumDistance(valsAtIndex, y: y, axis: ChartYAxis.AxisDependency.Right)
+        let leftdist = ChartUtils.getMinimumDistance(valsAtIndex: valsAtIndex, y: y, axis: ChartYAxis.AxisDependency.Left)
+        let rightdist = ChartUtils.getMinimumDistance(valsAtIndex: valsAtIndex, y: y, axis: ChartYAxis.AxisDependency.Right)
         
         let axis = leftdist < rightdist ? ChartYAxis.AxisDependency.Left : ChartYAxis.AxisDependency.Right
         
@@ -93,7 +93,9 @@ public class ChartHighlighter : NSObject
                 continue
             }
             
-            let dataSet = data.getDataSetByIndex(i)
+            guard let dataSet = data.getDataSetByIndex(index: i) else {
+                continue
+            }
             
             // dont include datasets that cannot be highlighted
             if !dataSet.isHighlightEnabled
@@ -102,12 +104,12 @@ public class ChartHighlighter : NSObject
             }
             
             // extract all y-values from all DataSets at the given x-index
-            let yVals: [Double] = dataSet.yValsForXIndex(xIndex)
+            let yVals: [Double] = dataSet.yValsForXIndex(x: xIndex)
             for yVal in yVals
             {
                 pt.y = CGFloat(yVal)
                 
-                self.chart!.getTransformer(dataSet.axisDependency).pointValueToPixel(&pt)
+                self.chart!.getTransformer(which: dataSet.axisDependency).pointValueToPixel(point: &pt)
                 
                 if !pt.y.isNaN
                 {

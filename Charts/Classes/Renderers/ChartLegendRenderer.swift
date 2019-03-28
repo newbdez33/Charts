@@ -44,7 +44,7 @@ public class ChartLegendRenderer: ChartRendererBase
             // loop for building up the colors and labels used in the legend
             for i in 0..<data.dataSetCount
             {
-                let dataSet = data.getDataSetByIndex(i)!
+                let dataSet = data.getDataSetByIndex(index: i)!
                 
                 var clrs: [NSUIColor] = dataSet.colors
                 let entryCount = dataSet.entryCount
@@ -66,24 +66,6 @@ public class ChartLegendRenderer: ChartRendererBase
                         // add the legend description label
                         colors.append(nil)
                         labels.append(bds.label)
-                    }
-                }
-                else if (dataSet is IPieChartDataSet)
-                {
-                    var xVals = data.xVals
-                    let pds = dataSet as! IPieChartDataSet
-                    
-                    for j in 0..<min(clrs.count, entryCount, xVals.count)
-                    {
-                        labels.append(xVals[j])
-                        colors.append(clrs[j])
-                    }
-                    
-                    if (pds.label != nil)
-                    {
-                        // add the legend description label
-                        colors.append(nil)
-                        labels.append(pds.label)
                     }
                 }
                 else if (dataSet is ICandleChartDataSet
@@ -368,7 +350,7 @@ public class ChartLegendRenderer: ChartRendererBase
                     
                     if (direction == .RightToLeft)
                     {
-                        posX -= (labels[i] as NSString!).sizeWithAttributes([NSFontAttributeName: labelFont]).width
+                        posX -= (labels[i] as NSString!).size(withAttributes: [NSAttributedString.Key.font: labelFont]).width
                     }
                     
                     if (!wasStacked)
@@ -394,44 +376,44 @@ public class ChartLegendRenderer: ChartRendererBase
         }
     }
 
-    private var _formLineSegmentsBuffer = [CGPoint](count: 2, repeatedValue: CGPoint())
+    private var _formLineSegmentsBuffer = [CGPoint](repeating: CGPoint(), count: 2)
     
     /// Draws the Legend-form at the given position with the color at the given index.
-    public func drawForm(context context: CGContext, x: CGFloat, y: CGFloat, colorIndex: Int, legend: ChartLegend)
+    public func drawForm(context: CGContext, x: CGFloat, y: CGFloat, colorIndex: Int, legend: ChartLegend)
     {
-        guard let formColor = legend.colors[colorIndex] where formColor != NSUIColor.clearColor() else {
+        guard let formColor = legend.colors[colorIndex], formColor != NSUIColor.clear else {
             return
         }
         
         let formsize = legend.formSize
         
-        CGContextSaveGState(context)
-        defer { CGContextRestoreGState(context) }
+        context.saveGState()
+        defer { context.restoreGState() }
         
         switch (legend.form)
         {
         case .Circle:
-            CGContextSetFillColorWithColor(context, formColor.CGColor)
-            CGContextFillEllipseInRect(context, CGRect(x: x, y: y - formsize / 2.0, width: formsize, height: formsize))
+            context.setFillColor(formColor.cgColor)
+            context.fillEllipse(in: CGRect(x: x, y: y - formsize / 2.0, width: formsize, height: formsize))
         case .Square:
-            CGContextSetFillColorWithColor(context, formColor.CGColor)
-            CGContextFillRect(context, CGRect(x: x, y: y - formsize / 2.0, width: formsize, height: formsize))
+            context.setFillColor(formColor.cgColor)
+            context.fill(CGRect(x: x, y: y - formsize / 2.0, width: formsize, height: formsize))
         case .Line:
             
-            CGContextSetLineWidth(context, legend.formLineWidth)
-            CGContextSetStrokeColorWithColor(context, formColor.CGColor)
+            context.setLineWidth(legend.formLineWidth)
+            context.setStrokeColor(formColor.cgColor)
             
             _formLineSegmentsBuffer[0].x = x
             _formLineSegmentsBuffer[0].y = y
             _formLineSegmentsBuffer[1].x = x + formsize
             _formLineSegmentsBuffer[1].y = y
-            CGContextStrokeLineSegments(context, _formLineSegmentsBuffer, 2)
+            context.strokeLineSegments(between: _formLineSegmentsBuffer)
         }
     }
 
     /// Draws the provided label at the given position.
-    public func drawLabel(context context: CGContext, x: CGFloat, y: CGFloat, label: String, font: NSUIFont, textColor: NSUIColor)
+    public func drawLabel(context: CGContext, x: CGFloat, y: CGFloat, label: String, font: NSUIFont, textColor: NSUIColor)
     {
-        ChartUtils.drawText(context: context, text: label, point: CGPoint(x: x, y: y), align: .Left, attributes: [NSFontAttributeName: font, NSForegroundColorAttributeName: textColor])
+        ChartUtils.drawText(context: context, text: label, point: CGPoint(x: x, y: y), align: .left, attributes: [NSAttributedString.Key.font: font, NSAttributedString.Key.foregroundColor: textColor])
     }
 }

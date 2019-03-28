@@ -19,10 +19,10 @@ public class BarChartDataSet: BarLineScatterCandleBubbleChartDataSet, IBarChartD
 {
     private func initialize()
     {
-        self.highlightColor = NSUIColor.blackColor()
+        self.highlightColor = UIColor.black
         
-        self.calcStackSize(yVals as! [BarChartDataEntry])
-        self.calcEntryCountIncludingStacks(yVals as! [BarChartDataEntry])
+        self.calcStackSize(yVals: yVals as! [BarChartDataEntry])
+        self.calcEntryCountIncludingStacks(yVals: yVals as! [BarChartDataEntry])
     }
     
     public required init()
@@ -107,8 +107,8 @@ public class BarChartDataSet: BarLineScatterCandleBubbleChartDataSet, IBarChartD
         
         _yMin = DBL_MAX
         _yMax = -DBL_MAX
-        
-        for i in start.stride(through: endValue, by: 1)
+
+        for i in Swift.stride(from:start, to: endValue, by: 1)
         {
             if let e = _yVals[i] as? BarChartDataEntry
             {
@@ -182,7 +182,7 @@ public class BarChartDataSet: BarLineScatterCandleBubbleChartDataSet, IBarChartD
     public var barBorderWidth : CGFloat = 0.0
 
     /// the color drawing borders around the bars.
-    public var barBorderColor = NSUIColor.blackColor()
+    public var barBorderColor = UIColor.black
 
     /// the alpha value (transparency) that is used for drawing the highlight indicator bar. min = 0.0 (fully transparent), max = 1.0 (fully opaque)
     public var highlightAlpha = CGFloat(120.0 / 255.0)
@@ -191,7 +191,7 @@ public class BarChartDataSet: BarLineScatterCandleBubbleChartDataSet, IBarChartD
     
     public override func copyWithZone(zone: NSZone) -> AnyObject
     {
-        let copy = super.copyWithZone(zone) as! BarChartDataSet
+        let copy = super.copyWithZone(zone: zone) as! BarChartDataSet
         copy._stackSize = _stackSize
         copy._entryCountStacks = _entryCountStacks
         copy.stackLabels = stackLabels

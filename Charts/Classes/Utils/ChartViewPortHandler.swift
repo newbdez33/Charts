@@ -18,7 +18,7 @@ import CoreGraphics
 public class ChartViewPortHandler: NSObject
 {
     /// matrix used for touch events
-    private var _touchMatrix = CGAffineTransformIdentity
+    private var _touchMatrix = CGAffineTransform.identity
     
     /// this rectangle defines the area in which graph values can be drawn
     private var _contentRect = CGRect()
@@ -30,13 +30,13 @@ public class ChartViewPortHandler: NSObject
     private var _minScaleY = CGFloat(1.0)
     
     /// maximum scale value on the y-axis
-    private var _maxScaleY = CGFloat.max
+    private var _maxScaleY = CGFloat.greatestFiniteMagnitude
     
     /// minimum scale value on the x-axis
     private var _minScaleX = CGFloat(1.0)
     
     /// maximum scale value on the x-axis
-    private var _maxScaleX = CGFloat.max
+    private var _maxScaleX = CGFloat.greatestFiniteMagnitude
     
     /// contains the current scale factor of the x-axis
     private var _scaleX = CGFloat(1.0)
@@ -227,7 +227,7 @@ public class ChartViewPortHandler: NSObject
         _minScaleX = 1.0
         _minScaleY = 1.0
 
-        return CGAffineTransformIdentity
+        return CGAffineTransform.identity
     }
     
     /// Translates to the specified point.
@@ -236,7 +236,7 @@ public class ChartViewPortHandler: NSObject
         let translateX = pt.x - offsetLeft
         let translateY = pt.y - offsetTop
         
-        let matrix = CGAffineTransformConcat(_touchMatrix, CGAffineTransformMakeTranslation(-translateX, -translateY))
+        let matrix = _touchMatrix.concatenating(CGAffineTransform(translationX: -translateX, y: -translateY))
         
         return matrix
     }
@@ -249,7 +249,7 @@ public class ChartViewPortHandler: NSObject
         let translateX = pt.x - offsetLeft
         let translateY = pt.y - offsetTop
         
-        let matrix = CGAffineTransformConcat(_touchMatrix, CGAffineTransformMakeTranslation(-translateX, -translateY))
+        let matrix = _touchMatrix.concatenating(CGAffineTransform(translationX: -translateX, y: -translateY))
         
         refresh(newMatrix: matrix, chart: chart, invalidate: true)
     }
@@ -268,7 +268,7 @@ public class ChartViewPortHandler: NSObject
     }
     
     /// limits the maximum scale and X translation of the given matrix
-    private func limitTransAndScale(inout matrix matrix: CGAffineTransform, content: CGRect?)
+    private func limitTransAndScale( matrix matrix: inout CGAffineTransform, content: CGRect?)
     {
         // min scale-x is 1
         _scaleX = min(max(_minScaleX, matrix.a), _maxScaleX)
@@ -320,7 +320,7 @@ public class ChartViewPortHandler: NSObject
         
         if (newValue == 0.0)
         {
-            newValue = CGFloat.max
+            newValue = CGFloat.greatestFiniteMagnitude
         }
         
         _maxScaleX = newValue
@@ -340,7 +340,7 @@ public class ChartViewPortHandler: NSObject
         }
         if (newMax == 0.0)
         {
-            newMax = CGFloat.max
+            newMax = CGFloat.greatestFiniteMagnitude
         }
         
         _minScaleX = newMin
@@ -371,7 +371,7 @@ public class ChartViewPortHandler: NSObject
         
         if (newValue == 0.0)
         {
-            newValue = CGFloat.max
+            newValue = CGFloat.greatestFiniteMagnitude
         }
         
         _maxScaleY = newValue
@@ -388,7 +388,7 @@ public class ChartViewPortHandler: NSObject
     
     public func isInBoundsX(x: CGFloat) -> Bool
     {
-        if (isInBoundsLeft(x) && isInBoundsRight(x))
+        if (isInBoundsLeft(x: x) && isInBoundsRight(x: x))
         {
             return true
         }
@@ -400,7 +400,7 @@ public class ChartViewPortHandler: NSObject
     
     public func isInBoundsY(y: CGFloat) -> Bool
     {
-        if (isInBoundsTop(y) && isInBoundsBottom(y))
+        if (isInBoundsTop(y: y) && isInBoundsBottom(y: y))
         {
             return true
         }
@@ -412,7 +412,7 @@ public class ChartViewPortHandler: NSObject
     
     public func isInBounds(x x: CGFloat, y: CGFloat) -> Bool
     {
-        if (isInBoundsX(x) && isInBoundsY(y))
+        if (isInBoundsX(x: x) && isInBoundsY(y))
         {
             return true
         }

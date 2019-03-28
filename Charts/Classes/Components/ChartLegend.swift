@@ -23,7 +23,7 @@ import CoreGraphics
 public class ChartLegend: ChartComponentBase
 {
     /// This property is deprecated - Use `position`, `horizontalAlignment`, `verticalAlignment`, `orientation`, `drawInside`, `direction`.
-    @available(*, deprecated=1.0, message="Use `position`, `horizontalAlignment`, `verticalAlignment`, `orientation`, `drawInside`, `direction`.")
+    @available(*, deprecated: 1.0, message: "Use `position`, `horizontalAlignment`, `verticalAlignment`, `orientation`, `drawInside`, `direction`.")
     @objc(ChartLegendPosition)
     public enum Position: Int
     {
@@ -101,7 +101,7 @@ public class ChartLegend: ChartComponentBase
     private var _isLegendCustom = false
     
     /// This property is deprecated - Use `position`, `horizontalAlignment`, `verticalAlignment`, `orientation`, `drawInside`, `direction`.
-    @available(*, deprecated=1.0, message="Use `position`, `horizontalAlignment`, `verticalAlignment`, `orientation`, `drawInside`, `direction`.")
+    @available(*, deprecated: 1.0, message: "Use `position`, `horizontalAlignment`, `verticalAlignment`, `orientation`, `drawInside`, `direction`.")
     public var position: Position
     {
         get
@@ -193,8 +193,8 @@ public class ChartLegend: ChartComponentBase
     /// The text direction of the legend
     public var direction: Direction = Direction.LeftToRight
 
-    public var font: NSUIFont = NSUIFont.systemFontOfSize(10.0)
-    public var textColor = NSUIColor.blackColor()
+    public var font: NSUIFont = NSUIFont.systemFont(ofSize: 10.0)
+    public var textColor = UIColor.black
 
     public var form = Form.Square
     public var formSize = CGFloat(8.0)
@@ -246,7 +246,7 @@ public class ChartLegend: ChartComponentBase
                 continue
             }
             
-            let size = (labels[i] as NSString!).sizeWithAttributes([NSFontAttributeName: font])
+            let size = (labels[i] as NSString!).size(withAttributes: [NSAttributedString.Key.font: font])
             
             if (size.width > maxW)
             {
@@ -270,7 +270,7 @@ public class ChartLegend: ChartComponentBase
     }
     
     /// This function is deprecated - Please read `neededWidth`/`neededHeight` after `calculateDimensions` was called.
-    @available(*, deprecated=1.0, message="Please read `neededWidth`/`neededHeight` after `calculateDimensions` was called.")
+    @available(*, deprecated: 1.0, message: "Please read `neededWidth`/`neededHeight` after `calculateDimensions` was called.")
     public func getFullSize(labelFont: NSUIFont) -> CGSize
     {
         return CGSize(width: neededWidth, height: neededHeight)
@@ -300,7 +300,7 @@ public class ChartLegend: ChartComponentBase
     
     public func calculateDimensions(labelFont labelFont: NSUIFont, viewPortHandler: ChartViewPortHandler)
     {
-        let maxEntrySize = getMaximumEntrySize(labelFont)
+        let maxEntrySize = getMaximumEntrySize(font: labelFont)
         textWidthMax = maxEntrySize.width
         textHeightMax = maxEntrySize.height
         
@@ -337,7 +337,7 @@ public class ChartLegend: ChartComponentBase
                 
                 if labels[i] != nil
                 {
-                    let size = (labels[i] as NSString!).sizeWithAttributes([NSFontAttributeName: labelFont])
+                    let size = (labels[i] as NSString!).size(withAttributes: [NSAttributedString.Key.font: labelFont])
                     
                     if drawingForm && !wasStacked
                     {
@@ -393,19 +393,19 @@ public class ChartLegend: ChartComponentBase
             // Prepare arrays for calculated layout
             if (calculatedLabelSizes.count != labelCount)
             {
-                calculatedLabelSizes = [CGSize](count: labelCount, repeatedValue: CGSize())
+                calculatedLabelSizes = [CGSize](repeating: CGSize(), count: labelCount)
             }
             
             if (calculatedLabelBreakPoints.count != labelCount)
             {
-                calculatedLabelBreakPoints = [Bool](count: labelCount, repeatedValue: false)
+                calculatedLabelBreakPoints = [Bool](repeating: false, count: labelCount)
             }
             
-            calculatedLineSizes.removeAll(keepCapacity: true)
+            calculatedLineSizes.removeAll(keepingCapacity: true)
             
             // Start calculating layout
             
-            let labelAttrs = [NSFontAttributeName: labelFont]
+            let labelAttrs = [NSAttributedString.Key.font: labelFont]
             var maxLineWidth: CGFloat = 0.0
             var currentLineWidth: CGFloat = 0.0
             var requiredWidth: CGFloat = 0.0
@@ -431,7 +431,7 @@ public class ChartLegend: ChartComponentBase
                 // grouped forms have null labels
                 if (labels[i] != nil)
                 {
-                    calculatedLabelSizes[i] = (labels[i] as NSString!).sizeWithAttributes(labelAttrs)
+                    calculatedLabelSizes[i] = (labels[i] as NSString!).size(withAttributes: labelAttrs)
                     requiredWidth += drawingForm ? formToTextSpace + formSize : 0.0
                     requiredWidth += calculatedLabelSizes[i].width
                 }
