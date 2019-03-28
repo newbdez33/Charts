@@ -341,8 +341,8 @@ open class ChartViewBase: NSUIView, ChartDataProvider, AnimatorDelegate
             context.saveGState()
             defer { context.restoreGState() }
             
-            let hasText = noDataText.characters.count > 0
-            let hasDescription = (noDataTextDescription?.characters.count ?? 0) > 0
+            let hasText = noDataText.count > 0
+            let hasDescription = (noDataTextDescription?.count ?? 0) > 0
             var textHeight = hasText ? infoFont.lineHeight : 0.0
             if hasDescription
             {
@@ -367,7 +367,7 @@ open class ChartViewBase: NSUIView, ChartDataProvider, AnimatorDelegate
                 y = y + infoFont.lineHeight
             }
             
-            if (noDataTextDescription != nil && (noDataTextDescription!).characters.count > 0)
+            if (noDataTextDescription != nil && (noDataTextDescription!).count > 0)
             {
                 ChartUtils.drawText(context: context, text: noDataTextDescription!, point: CGPoint(x: frame.width / 2.0, y: y), align: .center, attributes: [convertFromNSAttributedStringKey(NSAttributedString.Key.font): infoFont, convertFromNSAttributedStringKey(NSAttributedString.Key.foregroundColor): infoTextColor])
             }
@@ -949,7 +949,7 @@ open class ChartViewBase: NSUIView, ChartDataProvider, AnimatorDelegate
     
     open func removeViewportJob(_ job: ViewPortJob)
     {
-        if let index = _viewportJobs.index(where: { $0 === job })
+        if let index = _viewportJobs.firstIndex(where: { $0 === job })
         {
             _viewportJobs.remove(at: index)
         }
