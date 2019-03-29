@@ -74,30 +74,28 @@ public class ChartSelectionDetail: NSObject
     }
     
     // MARK: NSObject
-    
-    public override func isEqual(object: AnyObject?) -> Bool
-    {
-        if (object === nil)
+    public override func isEqual(_ object: Any?) -> Bool {
+        if (object == nil)
         {
             return false
         }
         
-        if (!object!.isKindOfClass(self.dynamicType))
+        if !(type(of: object!) == type(of: self) )
         {
             return false
         }
         
-        if (object!.value != _value)
+        if ((object! as! ChartSelectionDetail).value != _value)
         {
             return false
         }
         
-        if (object!.dataSetIndex != _dataSetIndex)
+        if ((object! as! ChartSelectionDetail).dataSetIndex != _dataSetIndex)
         {
             return false
         }
         
-        if (object!.dataSet !== _dataSet)
+        if ((object! as! ChartSelectionDetail).dataSet !== _dataSet)
         {
             return false
         }
@@ -113,7 +111,7 @@ public func ==(lhs: ChartSelectionDetail, rhs: ChartSelectionDetail) -> Bool
         return true
     }
     
-    if (!lhs.isKindOfClass(rhs.dynamicType))
+    if !(type(of: lhs) == type(of: rhs) )
     {
         return false
     }

@@ -31,7 +31,7 @@ public class ChartUtils
         internal static let RAD2DEG = 180.0 / M_PI
     }
     
-    internal class func roundToNextSignificant(number number: Double) -> Double
+    internal class func roundToNextSignificant(number: Double) -> Double
     {
         if (number.isInfinite || number.isNaN || number == 0)
         {
@@ -70,7 +70,7 @@ public class ChartUtils
     
     /// - returns: the index of the DataSet that contains the closest value on the y-axis
     internal class func closestDataSetIndexByPixelY(
-        valsAtIndex valsAtIndex: [ChartSelectionDetail],
+        valsAtIndex: [ChartSelectionDetail],
                     y: CGFloat,
                     axis: ChartYAxis.AxisDependency?) -> Int?
     {
@@ -79,7 +79,7 @@ public class ChartUtils
     
     /// - returns: the index of the DataSet that contains the closest value on the y-axis
     internal class func closestDataSetIndexByValue(
-        valsAtIndex valsAtIndex: [ChartSelectionDetail],
+        valsAtIndex: [ChartSelectionDetail],
                     value: Double,
                     axis: ChartYAxis.AxisDependency?) -> Int?
     {
@@ -88,7 +88,7 @@ public class ChartUtils
     
     /// - returns: the `ChartSelectionDetail` of the closest value on the y-axis
     internal class func closestSelectionDetailByPixelY(
-        valsAtIndex valsAtIndex: [ChartSelectionDetail],
+        valsAtIndex: [ChartSelectionDetail],
                     y: CGFloat,
                     axis: ChartYAxis.AxisDependency?) -> ChartSelectionDetail?
     {
@@ -115,7 +115,7 @@ public class ChartUtils
     
     /// - returns: the `ChartSelectionDetail` of the closest value on the y-axis
     internal class func closestSelectionDetailByValue(
-        valsAtIndex valsAtIndex: [ChartSelectionDetail],
+        valsAtIndex: [ChartSelectionDetail],
                     value: Double,
                     axis: ChartYAxis.AxisDependency?) -> ChartSelectionDetail?
     {
@@ -146,7 +146,7 @@ public class ChartUtils
         y: CGFloat,
         axis: ChartYAxis.AxisDependency) -> CGFloat
     {
-        var distance = CGFloat.max
+        var distance = CGFloat.greatestFiniteMagnitude
         
         for i in 0 ..< valsAtIndex.count
         {
@@ -187,7 +187,7 @@ public class ChartUtils
             point.x -= text.size(withAttributes: attributes).width
         }
         
-        NSUIGraphicsPushContext(context)
+        NSUIGraphicsPushContext(context: context)
         
         (text as NSString).draw(at: point, withAttributes: attributes)
         
@@ -198,7 +198,7 @@ public class ChartUtils
     {
         var drawOffset = CGPoint()
         
-        NSUIGraphicsPushContext(context)
+        NSUIGraphicsPushContext(context: context)
         
         if angleRadians != 0.0
         {
@@ -246,7 +246,7 @@ public class ChartUtils
         NSUIGraphicsPopContext()
     }
     
-    internal class func drawMultilineText(context: CGContext, text: String, knownTextSize: CGSize, point: CGPoint, attributes: [String : AnyObject]?, constrainedToSize: CGSize, anchor: CGPoint, angleRadians: CGFloat)
+    internal class func drawMultilineText(context: CGContext, text: String, knownTextSize: CGSize, point: CGPoint, attributes: [NSAttributedString.Key : AnyObject]?, constrainedToSize: CGSize, anchor: CGPoint, angleRadians: CGFloat)
     {
         var rect = CGRect(origin: CGPoint(), size: knownTextSize)
         
@@ -270,12 +270,12 @@ public class ChartUtils
             }
             
             context.saveGState()
-            CGContextTranslateCTM(context, translate.x, translate.y)
-            CGContextRotateCTM(context, angleRadians)
+            context.translateBy(x:translate.x, y:translate.y)
+            context.rotate(by: angleRadians)
             
-            (text as NSString).drawWithRect(rect, options: .UsesLineFragmentOrigin, attributes: attributes, context: nil)
+            (text as NSString).draw(with: rect, options: .usesLineFragmentOrigin, attributes: attributes, context: nil)
             
-            CGContextRestoreGState(context)
+            context.restoreGState()
         }
         else
         {
@@ -288,15 +288,15 @@ public class ChartUtils
             rect.origin.x += point.x
             rect.origin.y += point.y
             
-            (text as NSString).drawWithRect(rect, options: .UsesLineFragmentOrigin, attributes: attributes, context: nil)
+            (text as NSString).draw(with: rect, options: .usesLineFragmentOrigin, attributes: attributes, context: nil)
         }
         
         NSUIGraphicsPopContext()
     }
     
-    internal class func drawMultilineText(context context: CGContext, text: String, point: CGPoint, attributes: [String : AnyObject]?, constrainedToSize: CGSize, anchor: CGPoint, angleRadians: CGFloat)
+    internal class func drawMultilineText(context: CGContext, text: String, point: CGPoint, attributes: [NSAttributedString.Key : AnyObject]?, constrainedToSize: CGSize, anchor: CGPoint, angleRadians: CGFloat)
     {
-        let rect = text.boundingRectWithSize(constrainedToSize, options: .UsesLineFragmentOrigin, attributes: attributes, context: nil)
+        let rect = text.boundingRect(with: constrainedToSize, options: .usesLineFragmentOrigin, attributes: attributes, context: nil)
         drawMultilineText(context: context, text: text, knownTextSize: rect.size, point: point, attributes: attributes, constrainedToSize: constrainedToSize, anchor: anchor, angleRadians: angleRadians)
     }
     
@@ -310,12 +310,12 @@ public class ChartUtils
             angle += 360.0
         }
         
-        return angle % 360.0
+        return angle.truncatingRemainder(dividingBy: 360.0) 
     }
     
     private class func generateDefaultValueFormatter() -> NumberFormatter
     {
-        let formatter = NSNumberFormatter()
+        let formatter = NumberFormatter()
         formatter.minimumIntegerDigits = 1
         formatter.maximumFractionDigits = 1
         formatter.minimumFractionDigits = 1
@@ -324,7 +324,7 @@ public class ChartUtils
     }
     
     /// - returns: the default value formatter used for all chart components that needs a default
-    internal class func defaultValueFormatter() -> NSNumberFormatter
+    internal class func defaultValueFormatter() -> NumberFormatter
     {
         return _defaultValueFormatter
     }
@@ -394,7 +394,7 @@ public class ChartUtils
             }
             else
             {
-                newArray.append(val!)
+                newArray.append(val! as NSObject)
             }
         }
         return newArray
