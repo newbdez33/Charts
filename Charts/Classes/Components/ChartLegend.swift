@@ -23,7 +23,7 @@ import CoreGraphics
 public class ChartLegend: ChartComponentBase
 {
     /// This property is deprecated - Use `position`, `horizontalAlignment`, `verticalAlignment`, `orientation`, `drawInside`, `direction`.
-    @available(*, deprecated: 1.0, message: "Use `position`, `horizontalAlignment`, `verticalAlignment`, `orientation`, `drawInside`, `direction`.")
+    @available(*, deprecated, message: "Use `position`, `horizontalAlignment`, `verticalAlignment`, `orientation`, `drawInside`, `direction`.")
     @objc(ChartLegendPosition)
     public enum Position: Int
     {
@@ -101,7 +101,7 @@ public class ChartLegend: ChartComponentBase
     private var _isLegendCustom = false
     
     /// This property is deprecated - Use `position`, `horizontalAlignment`, `verticalAlignment`, `orientation`, `drawInside`, `direction`.
-    @available(*, deprecated: 1.0, message: "Use `position`, `horizontalAlignment`, `verticalAlignment`, `orientation`, `drawInside`, `direction`.")
+    @available(*, deprecated, message: "Use `position`, `horizontalAlignment`, `verticalAlignment`, `orientation`, `drawInside`, `direction`.")
     public var position: Position
     {
         get
@@ -246,7 +246,7 @@ public class ChartLegend: ChartComponentBase
                 continue
             }
             
-            let size = (labels[i] as NSString!).size(withAttributes: [NSAttributedString.Key.font: font])
+            let size = (labels[i]! as NSString).size(withAttributes: [NSAttributedString.Key.font: font])
             
             if (size.width > maxW)
             {
@@ -270,7 +270,7 @@ public class ChartLegend: ChartComponentBase
     }
     
     /// This function is deprecated - Please read `neededWidth`/`neededHeight` after `calculateDimensions` was called.
-    @available(*, deprecated: 1.0, message: "Please read `neededWidth`/`neededHeight` after `calculateDimensions` was called.")
+    @available(*, deprecated, message: "Please read `neededWidth`/`neededHeight` after `calculateDimensions` was called.")
     public func getFullSize(labelFont: NSUIFont) -> CGSize
     {
         return CGSize(width: neededWidth, height: neededHeight)
@@ -298,7 +298,7 @@ public class ChartLegend: ChartComponentBase
     /// **default**: 0.95 (95%)
     public var maxSizePercent: CGFloat = 0.95
     
-    public func calculateDimensions(labelFont labelFont: NSUIFont, viewPortHandler: ChartViewPortHandler)
+    public func calculateDimensions(labelFont: NSUIFont, viewPortHandler: ChartViewPortHandler)
     {
         let maxEntrySize = getMaximumEntrySize(font: labelFont)
         textWidthMax = maxEntrySize.width
@@ -337,7 +337,7 @@ public class ChartLegend: ChartComponentBase
                 
                 if labels[i] != nil
                 {
-                    let size = (labels[i] as NSString!).size(withAttributes: [NSAttributedString.Key.font: labelFont])
+                    let size = (labels[i]! as NSString).size(withAttributes: [NSAttributedString.Key.font: labelFont])
                     
                     if drawingForm && !wasStacked
                     {
@@ -431,7 +431,7 @@ public class ChartLegend: ChartComponentBase
                 // grouped forms have null labels
                 if (labels[i] != nil)
                 {
-                    calculatedLabelSizes[i] = (labels[i] as NSString!).size(withAttributes: labelAttrs)
+                    calculatedLabelSizes[i] = (labels[i]! as NSString).size(withAttributes: labelAttrs)
                     requiredWidth += drawingForm ? formToTextSpace + formSize : 0.0
                     requiredWidth += calculatedLabelSizes[i].width
                 }
@@ -490,7 +490,7 @@ public class ChartLegend: ChartComponentBase
     
     /// colors and labels that will be appended to the end of the auto calculated colors and labels after calculating the legend.
     /// (if the legend has already been calculated, you will need to call notifyDataSetChanged() to let the changes take effect)
-    public func setExtra(colors colors: [NSUIColor?], labels: [String?])
+    public func setExtra(colors: [NSUIColor?], labels: [String?])
     {
         self._extraLabels = labels
         self._extraColors = colors
@@ -503,7 +503,7 @@ public class ChartLegend: ChartComponentBase
     /// * A nil color will avoid drawing a form, and a clearColor will leave a space for the form.
     /// This will disable the feature that automatically calculates the legend labels and colors from the datasets.
     /// Call `resetCustom(...)` to re-enable automatic calculation (and then `notifyDataSetChanged()` is needed).
-    public func setCustom(colors colors: [NSUIColor?], labels: [String?])
+    public func setCustom(colors: [NSUIColor?], labels: [String?])
     {
         self.labels = labels
         self.colors = colors
@@ -549,7 +549,7 @@ public class ChartLegend: ChartComponentBase
     
     /// colors and labels that will be appended to the end of the auto calculated colors and labels after calculating the legend.
     /// (if the legend has already been calculated, you will need to call `notifyDataSetChanged()` to let the changes take effect)
-    public func setExtra(colors colors: [NSObject], labels: [NSObject])
+    public func setExtra(colors: [NSObject], labels: [NSObject])
     {
         if (colors.count != labels.count)
         {
@@ -567,7 +567,7 @@ public class ChartLegend: ChartComponentBase
     /// * A nil color will avoid drawing a form, and a clearColor will leave a space for the form.
     /// This will disable the feature that automatically calculates the legend labels and colors from the datasets.
     /// Call `resetLegendToAuto(...)` to re-enable automatic calculation, and then if needed - call `notifyDataSetChanged()` on the chart to make it refresh the data.
-    public func setCustom(colors colors: [NSObject], labels: [NSObject])
+    public func setCustom(colors: [NSObject], labels: [NSObject])
     {
         if (colors.count != labels.count)
         {

@@ -104,7 +104,7 @@ public class ChartLegendRenderer: ChartRendererBase
         legend.calculateDimensions(labelFont: legend.font, viewPortHandler: viewPortHandler)
     }
     
-    public func renderLegend(context context: CGContext)
+    public func renderLegend(context: CGContext)
     {
         guard let legend = legend else { return }
         
@@ -350,7 +350,7 @@ public class ChartLegendRenderer: ChartRendererBase
                     
                     if (direction == .RightToLeft)
                     {
-                        posX -= (labels[i] as NSString!).size(withAttributes: [NSAttributedString.Key.font: labelFont]).width
+                        posX -= (labels[i]! as NSString).size(withAttributes: [NSAttributedString.Key.font: labelFont]).width
                     }
                     
                     if (!wasStacked)

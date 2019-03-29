@@ -334,7 +334,7 @@ public class BarLineChartViewBase: ChartViewBase, BarLineScatterCandleBubbleChar
         _rightAxis.calculate(min: _data?.getYMin(axis: .Right) ?? 0.0, max: _data?.getYMax(axis: .Right) ?? 0.0)
     }
     
-    internal func calculateLegendOffsets( offsetLeft offsetLeft: inout CGFloat, offsetTop: inout CGFloat, offsetRight: inout CGFloat, offsetBottom: inout CGFloat)
+    internal func calculateLegendOffsets( offsetLeft: inout CGFloat, offsetTop: inout CGFloat, offsetRight: inout CGFloat, offsetBottom: inout CGFloat)
     {
         // setup offsets for legend
         if _legend !== nil && _legend.isEnabled && !_legend.drawInside
@@ -523,7 +523,7 @@ public class BarLineChartViewBase: ChartViewBase, BarLineScatterCandleBubbleChar
     }
     
     /// draws the grid background
-    internal func drawGridBackground(context context: CGContext)
+    internal func drawGridBackground(context: CGContext)
     {
         if (drawGridBackgroundEnabled || drawBordersEnabled)
         {
@@ -820,7 +820,7 @@ public class BarLineChartViewBase: ChartViewBase, BarLineScatterCandleBubbleChar
         }
     }
     
-    private func performPanChange(translation translation: CGPoint) -> Bool
+    private func performPanChange(translation: CGPoint) -> Bool
     {
         var translation = translation
         
@@ -1071,7 +1071,7 @@ public class BarLineChartViewBase: ChartViewBase, BarLineScatterCandleBubbleChar
     /// - parameter duration: the duration of the animation in seconds
     /// - parameter easing:
     public func zoomAndCenterViewAnimated(
-        scaleX scaleX: CGFloat,
+        scaleX: CGFloat,
         scaleY: CGFloat,
         xIndex: CGFloat,
         yValue: Double,
@@ -1113,7 +1113,7 @@ public class BarLineChartViewBase: ChartViewBase, BarLineScatterCandleBubbleChar
     /// - parameter duration: the duration of the animation in seconds
     /// - parameter easing:
     public func zoomAndCenterViewAnimated(
-        scaleX scaleX: CGFloat,
+        scaleX: CGFloat,
         scaleY: CGFloat,
         xIndex: CGFloat,
         yValue: Double,
@@ -1134,7 +1134,7 @@ public class BarLineChartViewBase: ChartViewBase, BarLineScatterCandleBubbleChar
     /// - parameter duration: the duration of the animation in seconds
     /// - parameter easing:
     public func zoomAndCenterViewAnimated(
-        scaleX scaleX: CGFloat,
+        scaleX: CGFloat,
         scaleY: CGFloat,
         xIndex: CGFloat,
         yValue: Double,
@@ -1180,7 +1180,7 @@ public class BarLineChartViewBase: ChartViewBase, BarLineScatterCandleBubbleChar
     /// Limits the maximum and minimum value count that can be visible by pinching and zooming.
     /// e.g. minRange=10, maxRange=100 no less than 10 values and no more that 100 values can be viewed
     /// at once without scrolling
-    public func setVisibleXRange(minXRange minXRange: CGFloat, maxXRange: CGFloat)
+    public func setVisibleXRange(minXRange: CGFloat, maxXRange: CGFloat)
     {
         let maxScale = CGFloat(_xAxis.axisRange) / minXRange
         let minScale = CGFloat(_xAxis.axisRange) / maxXRange
@@ -1236,7 +1236,7 @@ public class BarLineChartViewBase: ChartViewBase, BarLineScatterCandleBubbleChar
     /// - parameter xIndex:
     /// - parameter yValue:
     /// - parameter axis: - which axis should be used as a reference for the y-axis
-    public func moveViewTo(xIndex xIndex: CGFloat, yValue: Double, axis: ChartYAxis.AxisDependency)
+    public func moveViewTo(xIndex: CGFloat, yValue: Double, axis: ChartYAxis.AxisDependency)
     {
         let valsInView = getDeltaY(axis: axis) / _viewPortHandler.scaleY
         
@@ -1259,7 +1259,7 @@ public class BarLineChartViewBase: ChartViewBase, BarLineScatterCandleBubbleChar
     /// - parameter duration: the duration of the animation in seconds
     /// - parameter easing:
     public func moveViewToAnimated(
-        xIndex xIndex: CGFloat,
+        xIndex: CGFloat,
         yValue: Double,
         axis: ChartYAxis.AxisDependency,
         duration: TimeInterval,
@@ -1294,7 +1294,7 @@ public class BarLineChartViewBase: ChartViewBase, BarLineScatterCandleBubbleChar
     /// - parameter duration: the duration of the animation in seconds
     /// - parameter easing:
     public func moveViewToAnimated(
-        xIndex xIndex: CGFloat,
+        xIndex: CGFloat,
         yValue: Double,
         axis: ChartYAxis.AxisDependency,
         duration: TimeInterval,
@@ -1312,7 +1312,7 @@ public class BarLineChartViewBase: ChartViewBase, BarLineScatterCandleBubbleChar
     /// - parameter duration: the duration of the animation in seconds
     /// - parameter easing:
     public func moveViewToAnimated(
-        xIndex xIndex: CGFloat,
+        xIndex: CGFloat,
         yValue: Double,
         axis: ChartYAxis.AxisDependency,
         duration: TimeInterval)
@@ -1327,7 +1327,7 @@ public class BarLineChartViewBase: ChartViewBase, BarLineScatterCandleBubbleChar
     /// - parameter yValue:
     /// - parameter axis: - which axis should be used as a reference for the y-axis
     public func centerViewTo(
-        xIndex xIndex: CGFloat,
+        xIndex: CGFloat,
         yValue: Double,
         axis: ChartYAxis.AxisDependency)
     {
@@ -1352,7 +1352,7 @@ public class BarLineChartViewBase: ChartViewBase, BarLineScatterCandleBubbleChar
     /// - parameter duration: the duration of the animation in seconds
     /// - parameter easing:
     public func centerViewToAnimated(
-        xIndex xIndex: CGFloat,
+        xIndex: CGFloat,
         yValue: Double,
         axis: ChartYAxis.AxisDependency,
         duration: TimeInterval,
@@ -1387,7 +1387,7 @@ public class BarLineChartViewBase: ChartViewBase, BarLineScatterCandleBubbleChar
     /// - parameter duration: the duration of the animation in seconds
     /// - parameter easing:
     public func centerViewToAnimated(
-        xIndex xIndex: CGFloat,
+        xIndex: CGFloat,
         yValue: Double,
         axis: ChartYAxis.AxisDependency,
         duration: TimeInterval,
@@ -1404,7 +1404,7 @@ public class BarLineChartViewBase: ChartViewBase, BarLineScatterCandleBubbleChar
     /// - parameter duration: the duration of the animation in seconds
     /// - parameter easing:
     public func centerViewToAnimated(
-        xIndex xIndex: CGFloat,
+        xIndex: CGFloat,
         yValue: Double,
         axis: ChartYAxis.AxisDependency,
         duration: TimeInterval)
@@ -1414,7 +1414,7 @@ public class BarLineChartViewBase: ChartViewBase, BarLineScatterCandleBubbleChar
 
     /// Sets custom offsets for the current `ChartViewPort` (the offsets on the sides of the actual chart window). Setting this will prevent the chart from automatically calculating it's offsets. Use `resetViewPortOffsets()` to undo this.
     /// ONLY USE THIS WHEN YOU KNOW WHAT YOU ARE DOING, else use `setExtraOffsets(...)`.
-    public func setViewPortOffsets(left left: CGFloat, top: CGFloat, right: CGFloat, bottom: CGFloat)
+    public func setViewPortOffsets(left: CGFloat, top: CGFloat, right: CGFloat, bottom: CGFloat)
     {
         _customViewPortEnabled = true
         
@@ -1610,7 +1610,7 @@ public class BarLineChartViewBase: ChartViewBase, BarLineScatterCandleBubbleChar
     /// (encapsulated in a `CGPoint`). This method transforms pixel coordinates to
     /// coordinates / values in the chart. This is the opposite method to
     /// `getPixelsForValues(...)`.
-    public func getValueByTouchPoint(pt pt: CGPoint, axis: ChartYAxis.AxisDependency) -> CGPoint
+    public func getValueByTouchPoint(pt: CGPoint, axis: ChartYAxis.AxisDependency) -> CGPoint
     {
         var pt = pt
         
@@ -1632,7 +1632,7 @@ public class BarLineChartViewBase: ChartViewBase, BarLineScatterCandleBubbleChar
 
     /// - returns: the y-value at the given touch position (must not necessarily be
     /// a value contained in one of the datasets)
-    public func getYValueByTouchPoint(pt pt: CGPoint, axis: ChartYAxis.AxisDependency) -> CGFloat
+    public func getYValueByTouchPoint(pt: CGPoint, axis: ChartYAxis.AxisDependency) -> CGFloat
     {
         return getValueByTouchPoint(pt: pt, axis: axis).y
     }
@@ -1654,7 +1654,7 @@ public class BarLineChartViewBase: ChartViewBase, BarLineScatterCandleBubbleChar
         let h = getHighlightByTouchPoint(pt: pt)
         if (h !== nil)
         {
-            return _data?.getDataSetByIndex(index: h!.dataSetIndex) as! IBarLineScatterCandleBubbleChartDataSet!
+            return _data?.getDataSetByIndex(index: h!.dataSetIndex) as! IBarLineScatterCandleBubbleChartDataSet?
         }
         return nil
     }

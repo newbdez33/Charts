@@ -17,7 +17,7 @@ import CoreGraphics
 
 public class HorizontalBarChartHighlighter: BarChartHighlighter
 {
-    public override func getHighlight(x x: CGFloat, y: CGFloat) -> ChartHighlight?
+    public override func getHighlight(x: CGFloat, y: CGFloat) -> ChartHighlight?
     {
         if let barData = self.chart?.data as? BarChartData
         {

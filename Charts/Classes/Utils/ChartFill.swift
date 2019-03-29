@@ -245,7 +245,7 @@ public class ChartFill: NSObject
     
     /// Draws the provided path in filled mode with the provided area
     public func fillPath(
-        context context: CGContext,
+        context: CGContext,
         rect: CGRect)
     {
         let fillType = _type

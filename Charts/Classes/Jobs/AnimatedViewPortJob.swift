@@ -74,7 +74,7 @@ public class AnimatedViewPortJob: ChartViewPortJob
         _displayLink.add(to: RunLoop.main, forMode: RunLoop.Mode.common)
     }
     
-    public func stop(finish finish: Bool)
+    public func stop(finish: Bool)
     {
         if (_displayLink != nil)
         {

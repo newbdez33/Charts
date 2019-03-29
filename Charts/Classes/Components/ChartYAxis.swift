@@ -237,7 +237,7 @@ public class ChartYAxis: ChartAxisBase
         {
             let text = getFormattedLabel(index: i)
             
-            if (longest.characters.count < text.characters.count)
+            if (longest.count < text.count)
             {
                 longest = text
             }

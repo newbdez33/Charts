@@ -84,7 +84,7 @@ public class ChartDataSet: ChartBaseDataSet
         calcMinMax(start: _lastStart, end: _lastEnd)
     }
     
-    public override func calcMinMax(start start: Int, end: Int)
+    public override func calcMinMax(start: Int, end: Int)
     {
         let yValCount = _yVals.count
         

@@ -29,7 +29,7 @@ public class ChartHighlighter : NSObject
     /// - parameter x:
     /// - parameter y:
     /// - returns:
-    public func getHighlight(x x: CGFloat, y: CGFloat) -> ChartHighlight?
+    public func getHighlight(x: CGFloat, y: CGFloat) -> ChartHighlight?
     {
         let xIndex = getXIndex(x: x)
         
@@ -59,7 +59,7 @@ public class ChartHighlighter : NSObject
     /// - parameter y:
     /// - parameter dataSetIndex: A dataset index to look at - or nil, to figure that out automatically
     /// - returns:
-    public func getSelectionDetail(xIndex xIndex: Int, y: CGFloat, dataSetIndex: Int?) -> ChartSelectionDetail?
+    public func getSelectionDetail(xIndex: Int, y: CGFloat, dataSetIndex: Int?) -> ChartSelectionDetail?
     {
         let valsAtIndex = getSelectionDetailsAtIndex(xIndex: xIndex, dataSetIndex: dataSetIndex)
         

@@ -166,7 +166,7 @@ public class ChartUtils
     }
     
     /// Calculates the position around a center point, depending on the distance from the center, and the angle of the position around the center.
-    internal class func getPosition(center center: CGPoint, dist: CGFloat, angle: CGFloat) -> CGPoint
+    internal class func getPosition(center: CGPoint, dist: CGFloat, angle: CGFloat) -> CGPoint
     {
         return CGPoint(
             x: center.x + dist * cos(angle * Math.FDEG2RAD),
@@ -174,7 +174,7 @@ public class ChartUtils
         )
     }
     
-    public class func drawText(context context: CGContext, text: String, point: CGPoint, align: NSTextAlignment, attributes: [NSAttributedString.Key : AnyObject]?)
+    public class func drawText(context: CGContext, text: String, point: CGPoint, align: NSTextAlignment, attributes: [NSAttributedString.Key : AnyObject]?)
     {
         var point = point
         
@@ -194,7 +194,7 @@ public class ChartUtils
         NSUIGraphicsPopContext()
     }
     
-    public class func drawText(context context: CGContext, text: String, point: CGPoint, attributes: [NSAttributedString.Key : AnyObject]?, anchor: CGPoint, angleRadians: CGFloat)
+    public class func drawText(context: CGContext, text: String, point: CGPoint, attributes: [NSAttributedString.Key : AnyObject]?, anchor: CGPoint, angleRadians: CGFloat)
     {
         var drawOffset = CGPoint()
         
@@ -340,13 +340,13 @@ public class ChartUtils
         return sizeOfRotatedRectangle(rectangleWidth: rectangleSize.width, rectangleHeight: rectangleSize.height, radians: radians)
     }
     
-    internal class func sizeOfRotatedRectangle(rectangleWidth rectangleWidth: CGFloat, rectangleHeight: CGFloat, degrees: CGFloat) -> CGSize
+    internal class func sizeOfRotatedRectangle(rectangleWidth: CGFloat, rectangleHeight: CGFloat, degrees: CGFloat) -> CGSize
     {
         let radians = degrees * Math.FDEG2RAD
         return sizeOfRotatedRectangle(rectangleWidth: rectangleWidth, rectangleHeight: rectangleHeight, radians: radians)
     }
     
-    internal class func sizeOfRotatedRectangle(rectangleWidth rectangleWidth: CGFloat, rectangleHeight: CGFloat, radians: CGFloat) -> CGSize
+    internal class func sizeOfRotatedRectangle(rectangleWidth: CGFloat, rectangleHeight: CGFloat, radians: CGFloat) -> CGSize
     {
         return CGSize(
             width: abs(rectangleWidth * cos(radians)) + abs(rectangleHeight * sin(radians)),

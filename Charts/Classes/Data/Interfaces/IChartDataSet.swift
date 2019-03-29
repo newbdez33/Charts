@@ -26,7 +26,7 @@ public protocol IChartDataSet
     /// If your data is in a database, you might query for the min/max and put them in variables.
     /// - parameter start: the index of the first y entry to calculate
     /// - parameter end: the index of the last y entry to calculate
-    func calcMinMax(start start: Int, end: Int)
+    func calcMinMax(start: Int, end: Int)
     
     /// - returns: the minimum y-value this DataSet holds
     var yMin: Double { get }
@@ -107,7 +107,7 @@ public protocol IChartDataSet
     ///
     /// - parameter xIndex: the xIndex to remove
     /// - returns: true if the entry was removed successfully, false if the entry does not exist or if this feature is not supported
-    func removeEntry(xIndex xIndex: Int) -> Bool
+    func removeEntry(xIndex: Int) -> Bool
     
     /// Removes the first Entry (at index 0) of this DataSet from the entries array.
     ///

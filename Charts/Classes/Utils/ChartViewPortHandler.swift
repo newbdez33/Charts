@@ -329,7 +329,7 @@ public class ChartViewPortHandler: NSObject
     }
     
     /// Sets the minimum and maximum scale factors for the x-axis
-    public func setMinMaxScaleX(minScaleX minScaleX: CGFloat, maxScaleX: CGFloat)
+    public func setMinMaxScaleX(minScaleX: CGFloat, maxScaleX: CGFloat)
     {
         var newMin = minScaleX
         var newMax = minScaleY
@@ -410,7 +410,7 @@ public class ChartViewPortHandler: NSObject
         }
     }
     
-    public func isInBounds(x x: CGFloat, y: CGFloat) -> Bool
+    public func isInBounds(x: CGFloat, y: CGFloat) -> Bool
     {
         if (isInBoundsX(x: x) && isInBoundsY(y: y))
         {

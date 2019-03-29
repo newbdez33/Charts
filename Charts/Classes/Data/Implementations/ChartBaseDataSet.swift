@@ -46,7 +46,7 @@ public class ChartBaseDataSet: NSObject, IChartDataSet
         calcMinMax(start: 0, end: entryCount - 1)
     }
     
-    public func calcMinMax(start start: Int, end: Int)
+    public func calcMinMax(start: Int, end: Int)
     {
         fatalError("calcMinMax is not implemented in ChartBaseDataSet")
     }

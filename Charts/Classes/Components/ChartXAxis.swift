@@ -115,7 +115,7 @@ public class ChartXAxis: ChartAxisBase
         {
             let text = values[i]
             
-            if (text != nil && longest.characters.count < (text!).characters.count)
+            if (text != nil && longest.count < text!.count)
             {
                 longest = text!
             }

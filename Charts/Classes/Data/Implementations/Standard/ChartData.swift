@@ -108,7 +108,7 @@ public class ChartData: NSObject
         
         for i in 0 ..< _xVals.count
         {
-            sum += _xVals[i] == nil ? 0 : (_xVals[i]!).characters.count
+            sum += _xVals[i] == nil ? 0 : (_xVals[i]!).count
         }
         
         _xValAverageLength = Double(sum) / Double(_xVals.count)
@@ -141,7 +141,7 @@ public class ChartData: NSObject
     }
     
     /// calc minimum and maximum y value over all datasets
-    internal func calcMinMax(start start: Int, end: Int)
+    internal func calcMinMax(start: Int, end: Int)
     {
         
         if (_dataSets == nil || _dataSets.count < 1)
@@ -892,7 +892,7 @@ public class ChartData: NSObject
     
     /// Checks if this data object contains the specified Entry. 
     /// - returns: true if so, false if not.
-    public func contains(entry entry: ChartDataEntry) -> Bool
+    public func contains(entry: ChartDataEntry) -> Bool
     {
         for set in dataSets
         {
@@ -907,7 +907,7 @@ public class ChartData: NSObject
     
     /// Checks if this data object contains the specified DataSet. 
     /// - returns: true if so, false if not.
-    public func contains(dataSet dataSet: IChartDataSet) -> Bool
+    public func contains(dataSet: IChartDataSet) -> Bool
     {
         for set in dataSets
         {

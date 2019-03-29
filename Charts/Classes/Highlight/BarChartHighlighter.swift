@@ -17,7 +17,7 @@ import CoreGraphics
 
 public class BarChartHighlighter: ChartHighlighter
 {
-    public override func getHighlight(x x: CGFloat, y: CGFloat) -> ChartHighlight?
+    public override func getHighlight(x: CGFloat, y: CGFloat) -> ChartHighlight?
     {
         if let barData = self.chart?.data as? BarChartData
         {
@@ -121,7 +121,7 @@ public class BarChartHighlighter: ChartHighlighter
     /// - parameter xIndex:
     /// - parameter yValue:
     /// - returns:
-    public func getStackedHighlight(selectionDetail selectionDetail: ChartSelectionDetail,
+    public func getStackedHighlight(selectionDetail: ChartSelectionDetail,
                                                     set: IBarChartDataSet,
                                                     xIndex: Int,
                                                     yValue: Double) -> ChartHighlight?
@@ -156,7 +156,7 @@ public class BarChartHighlighter: ChartHighlighter
     /// - parameter entry:
     /// - parameter value:
     /// - returns:
-    public func getClosestStackIndex(ranges ranges: [ChartRange]?, value: Double) -> Int
+    public func getClosestStackIndex(ranges: [ChartRange]?, value: Double) -> Int
     {
         if ranges == nil
         {
@@ -213,7 +213,7 @@ public class BarChartHighlighter: ChartHighlighter
     /// Splits up the stack-values of the given bar-entry into Range objects.
     /// - parameter entry:
     /// - returns:
-    public func getRanges(entry entry: BarChartDataEntry) -> [ChartRange]?
+    public func getRanges(entry: BarChartDataEntry) -> [ChartRange]?
     {
         let values = entry.values
         if (values == nil)
