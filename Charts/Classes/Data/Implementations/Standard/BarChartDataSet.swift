@@ -14,7 +14,7 @@
 import Foundation
 import CoreGraphics
 
-
+@objcMembers
 public class BarChartDataSet: BarLineScatterCandleBubbleChartDataSet, IBarChartDataSet
 {
     private func initialize()
